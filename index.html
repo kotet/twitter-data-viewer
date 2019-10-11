@@ -20,7 +20,6 @@
                     let script_tag = document.createElement("script");
                     script_tag.src = e.target.result;
                     script_tag.addEventListener("load", function () {
-                        console.log(YTD.tweet.part0[0]);
                         function processTweet(args) {
                             let i = args[0];
                             if (i < YTD.tweet.part0.length) {
@@ -84,6 +83,8 @@
 
 <body>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <a href="https://github.com/kotet/twitter-data-viewer">source</a>
+    <a href="https://kotet.jp">kotet.jp</a>
     <div id="open-nav">
         <p>tweet.jsを選択して開いてください。</p>
         <input type="file" id="file-input">
