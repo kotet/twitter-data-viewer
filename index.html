@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超簡易tweet.jsビューアー</title>
+    <script>
+        window.onload = function () {
+            window.YTD = {};
+            YTD.tweet = {};
+            let out = document.getElementById("output");
+            let stat = document.getElementById("status");
+            function load(e) {
+                stat.innerText = "loading...";
+                let file = e.target.files[0];
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let script_tag = document.createElement("script");
+                    script_tag.src = e.target.result;
+                    script_tag.addEventListener("load", function () {
+                        console.log(YTD.tweet.part0[0]);
+                        function processTweet(args) {
+                            let i = args[0];
+                            if (i < YTD.tweet.part0.length) {
+                                out.appendChild(createTweetElement(YTD.tweet.part0[i]));
+                                stat.innerText = "loaded " + i + " tweets";
+                                setTimeout(processTweet, 10, [i + 1]);
+                            }
+                        }
+                        setTimeout(processTweet, 10, [0]);
+                    });
+                    document.getElementsByTagName("head")[0].appendChild(script_tag);
+                }
+                reader.readAsDataURL(file);
+                document.getElementById('open-nav').remove();
+            }
+            document.getElementById('file-input').addEventListener('input', load, false);
+        }
+        function createTweetElement(tweet) {
+            let text = tweet.full_text;
+            let id = tweet.id_str;
+            let container = document.createElement("div");
+
+            let text_p = document.createElement("p");
+            text_p.innerText = text;
+            container.appendChild(text_p);
+
+            let quote = document.createElement("blockquote");
+            let link = document.createElement("a");
+            link.href = "https://twitter.com/kotetttt/status/" + id;
+            quote.appendChild(link);
+            container.appendChild(quote);
+
+            let details_button = document.createElement("button");
+            details_button.innerText = "Show Details";
+            details_button.onclick = function (e) {
+                quote.className = "twitter-tweet";
+                twttr.widgets.load();
+                details_button.remove();
+            }
+            container.appendChild(details_button);
+            return container;
+        }
+    </script>
+    <style>
+        #output {
+            display: block;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #output div {
+            padding: 1em;
+            border-bottom: 1px solid gray;
+        }
+
+        #status {
+            position: fixed;
+        }
+    </style>
+</head>
+
+<body>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div id="open-nav">
+        <p>tweet.jsを選択して開いてください。</p>
+        <input type="file" id="file-input">
+    </div>
+    <p id="status"></p>
+    <output id="output"></output>
+</body>
+
+</html>
