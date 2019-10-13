@@ -47,20 +47,30 @@
             container.appendChild(text_p);
 
             let quote = document.createElement("blockquote");
-            let link = document.createElement("a");
-            link.href = "https://twitter.com/kotetttt/status/" + id;
-            quote.appendChild(link);
+
+            quote.appendChild(create_link_tag(id));
             container.appendChild(quote);
 
             let details_button = document.createElement("button");
-            details_button.innerText = "Show Details";
+            details_button.innerText = "詳細(この場で表示)";
             details_button.onclick = function (e) {
                 quote.className = "twitter-tweet";
                 twttr.widgets.load();
                 details_button.remove();
             }
             container.appendChild(details_button);
+
+            let link = create_link_tag(id);
+            link.target = "_blank";
+            link.innerText = "リンク";
+            container.appendChild(link);
             return container;
+        }
+
+        function create_link_tag(id) {
+            let link = document.createElement("a");
+            link.href = "https://twitter.com/kotetttt/status/" + id;
+            return link;
         }
     </script>
     <style>
@@ -77,6 +87,9 @@
 
         #status {
             position: fixed;
+        }
+        a {
+            margin-left: 1em;
         }
     </style>
 </head>
